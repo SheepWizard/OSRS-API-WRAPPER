@@ -139,37 +139,58 @@ public class OSRSUser
     }
     
     /**
-     * gets the clue object for a given clue scroll type
-     * @param clue
-     * @return 
+     * gets the minigame object for a given minigame
+     * @param minigame The minigame you want the stats for
+     * @return OSRSMinigame object
      */
-    public OSRSMinigame getMinigame(String clue)
+    public OSRSMinigame getMinigame(String minigame)
     {
-        if(playerMinigames.containsKey(clue.toLowerCase()))
-            return playerMinigames.get(clue.toLowerCase());
+        if(playerMinigames.containsKey(minigame.toLowerCase()))
+            return playerMinigames.get(minigame.toLowerCase());
         return new OSRSMinigame("Null", -1, -1);
     }
     
+    /**
+     * Returns a hashmap of all the minigame objects
+     * @return OSRSMinigame hashmap
+     */
     public HashMap<String, OSRSMinigame> getAllMinigames()
     {
         return playerMinigames;
     }
     
+    /**
+     * Returns a hashmap of all skill objects
+     * @return OSRSStat hashmap
+     */
     public HashMap<String, OSRSStat> getAllSkills()
     {
         return playerStats;
     }
     
+    /**
+     * Get all the names of skills you can select from
+     * @return String array of skill names
+     */
     public String[] getSkillNames()
     {
         return statNames;
     }
     
+    /**
+     * Get all the names of minigames you can select from
+     * @return String array of all minigame names
+     */
     public String[] getMinigameNames()
     {
         return minigameNames;
     }
     
+    /**
+     * Change user you want to search stats for
+     * @param userName Players user name
+     * @throws IOException Error if player is not found
+     */
     public void changePlayer(String userName) throws IOException
     {
         valid = false;
@@ -179,9 +200,18 @@ public class OSRSUser
         createStats();
     }
     
+    /**
+     * If object has a valid player
+     * @return True is object has a valid player, false if not
+     */
     public boolean getValid()
     {
         return this.valid;
+    }
+    
+    public String getUserName()
+    {
+        return this.userName;
     }
     
     private int getCombatLevel(int defc, int hit, int prayer, int att, int stre, int rang, int mag)
