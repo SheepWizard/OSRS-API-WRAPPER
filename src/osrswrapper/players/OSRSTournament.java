@@ -15,6 +15,6 @@ public class OSRSTournament extends OSRSUser
     
     public OSRSTournament(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "Tournament");
     }
 }

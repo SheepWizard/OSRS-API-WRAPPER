@@ -15,6 +15,6 @@ public class OSRSUltimateIronMan extends OSRSUser
     
     public OSRSUltimateIronMan(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "Ultimate Ironman");
     }
 }

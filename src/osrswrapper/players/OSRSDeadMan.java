@@ -11,6 +11,6 @@ public class OSRSDeadMan extends OSRSUser
     
     public OSRSDeadMan(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "DeadMan");
     }
 }

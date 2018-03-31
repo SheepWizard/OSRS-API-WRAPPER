@@ -15,6 +15,6 @@ public class OSRSSeasonal extends OSRSUser
     
     public OSRSSeasonal(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "Seasonal");
     }
 }

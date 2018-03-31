@@ -15,6 +15,6 @@ public class OSRSHardCoreIronMan extends OSRSUser
     
     public OSRSHardCoreIronMan(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "Hardcore Ironman");
     }
 }

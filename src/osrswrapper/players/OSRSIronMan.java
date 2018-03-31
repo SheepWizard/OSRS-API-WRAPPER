@@ -15,6 +15,6 @@ public class OSRSIronMan extends OSRSUser
     
     public OSRSIronMan(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "Ironman");
     }
 }

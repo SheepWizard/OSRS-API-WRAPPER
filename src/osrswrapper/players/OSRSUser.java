@@ -16,6 +16,7 @@ public class OSRSUser
     private final HashMap<String, OSRSMinigame> playerMinigames = new HashMap<>();
     private final String RSURL;
     private boolean valid = false;
+    private final String accountType;
     
     private final String[] statNames = new String[]{
         "overall",
@@ -62,10 +63,11 @@ public class OSRSUser
      * @param userName Players username
      * @throws IOException Error if player is not found
      */
-    public OSRSUser(String userName, String url) throws IOException
+    public OSRSUser(String userName, String url, String accountType) throws IOException
     {
         this.userName = userName;
         this.RSURL = url;
+        this.accountType = accountType;
         createStats();
         
     }
@@ -212,6 +214,11 @@ public class OSRSUser
     public String getUserName()
     {
         return this.userName;
+    }
+    
+    public String getAccountType()
+    {
+        return this.accountType;
     }
     
     private int getCombatLevel(int defc, int hit, int prayer, int att, int stre, int rang, int mag)

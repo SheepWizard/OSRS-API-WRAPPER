@@ -10,6 +10,6 @@ public class OSRSPlayer extends OSRSUser
     
     public OSRSPlayer(String userName) throws IOException
     {
-        super(userName, url);
+        super(userName, url, "Normal");
     }
 }

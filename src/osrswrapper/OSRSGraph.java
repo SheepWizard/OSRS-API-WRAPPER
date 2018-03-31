@@ -31,11 +31,21 @@ public class OSRSGraph
         Color.CYAN,
         Color.GRAY,
     };
+    
+    
+    /**
+     * Create a graph object
+     */
     public OSRSGraph()
     {
         
     }
-    
+    /**
+     * Add a player to be displayed on graph
+     * @param player OSRSUser object
+     * @return Returns false if too many players have been added of player is not valid. 
+     * You can use OSRSUser.getValid() to check if player is valid beforehand.
+     */
     public boolean addPlayer(OSRSUser player)
     {
         if(users.size() >= 9)
@@ -48,6 +58,135 @@ public class OSRSGraph
         return false;
     }
     
+    /**
+     * Creates a graph of players skills
+     * @return A BufferedImage of the graph. Save graph as a .PNG.
+     * If BufferedImage is null then you have not added any users.
+     */
+    public BufferedImage drawGraph()
+    {
+        if(users.isEmpty())
+            return null;
+        
+        final Font myFont = new Font("Serif", Font.PLAIN, 15);
+        final int imageWidth = 1280;
+        final int imageHeight = 720;
+        
+        //x-axis contains list of skills
+        //minus 2, we dont want the first or the second skill
+        final int xAxisItems = users.get(0).getAllSkills().size()-3;
+        //y-axis contains 0 - 99
+        final int yAxisItems = 99;
+        
+        final String[] skillList = users.get(0).getSkillNames();
+        
+        //the offset of the graph from the start of the image
+        final int xOffsetFromImage = 60;
+        final int yOffsetFromImage = 10;
+        
+        //x/y axis bar lengths
+        final int xBarLength = 1000;
+        final int yBarLength = 600;
+        
+        //spacing between each item on the axis
+        final int xAxisSpacing = xBarLength / xAxisItems;
+        final int yAxisSpacing = yBarLength / yAxisItems;
+        
+        final int yTextPosition = xOffsetFromImage - 35;
+        final int xTextPosition = yOffsetFromImage+yBarLength + 35;
+        
+        final int ovalSize = 4;
+        final int ovalOffset = ovalSize/2;
+        
+        final int userTextOffset = 20;
+           
+        graph = new BufferedImage(imageWidth, imageHeight,  BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = graph.createGraphics();
+        
+        //fill rectangle with white
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, graph.getWidth(), graph.getHeight());
+        
+        //draw axis bars
+        g.setStroke(new BasicStroke(2));
+        g.setColor(Color.BLACK);
+        g.drawLine(xOffsetFromImage, yOffsetFromImage, xOffsetFromImage, yOffsetFromImage + yBarLength);
+        g.drawLine(xOffsetFromImage, yOffsetFromImage + yBarLength, xOffsetFromImage + xBarLength,  yOffsetFromImage + yBarLength);
+
+        g.setFont(myFont);
+        
+        //draw number of yAxis
+        for(int i = 0; i<=yAxisItems; i++)
+        {
+            if(i%5 == 0 || i == 99)
+            {
+                int ySpacing = (yBarLength + yOffsetFromImage) - yAxisSpacing*i;
+                
+                g.setColor(new Color(0,0,0,255));
+                //draw text
+                g.drawString(Integer.toString(i), yTextPosition, ySpacing );
+                //draw small line
+                g.drawLine(xOffsetFromImage-20, ySpacing, xOffsetFromImage, ySpacing);
+                //draw line across graph
+                g.setColor(new Color(0,0,0,50));
+                g.drawLine(xOffsetFromImage, ySpacing, xOffsetFromImage + xBarLength, ySpacing);
+            }
+        }
+        
+        //rotate text
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.rotate(Math.toRadians(45), 0, 0);
+        Font font = new Font(null, Font.PLAIN, 15);    
+        Font rotatedFont = font.deriveFont(affineTransform);
+        g.setFont(rotatedFont);
+        
+        for(int i=0; i<=xAxisItems; i++)
+        {
+            int xSpacing = xOffsetFromImage + xAxisSpacing*i;
+            
+            g.setColor(new Color(0,0,0,255));
+            //draw text
+            g.drawString(skillList[i+1], xSpacing, xTextPosition);
+            //draw small line
+            g.drawLine(xSpacing, yOffsetFromImage + yBarLength, xSpacing, yOffsetFromImage + yBarLength + 20);
+            //draw line across graph
+            g.setColor(new Color(0,0,0,50));
+            g.drawLine(xSpacing, yOffsetFromImage + yBarLength, xSpacing, yOffsetFromImage);
+        }
+        
+        g.setFont(myFont);
+        //Draw lines on graph
+        for(int i = 0; i<users.size(); i++)
+        {
+            HashMap<String, OSRSStat> userSkills = users.get(i).getAllSkills();
+            g.setColor(colours[i]);
+            int oldLevel = 0;
+            
+            for(int z = 0; z<=xAxisItems; z++)
+            {
+                int level = userSkills.get(skillList[z+1]).getLevel();
+                //draw dots
+                int xSpacing = xOffsetFromImage + xAxisSpacing*z;
+                int ySpacing = (yBarLength + yOffsetFromImage) - yAxisSpacing*level;
+                g.drawOval(xSpacing - ovalOffset, ySpacing - ovalOffset, ovalSize, ovalSize);
+                //draw lines
+                if(z != 0)
+                {
+                    int x = xOffsetFromImage + xAxisSpacing* (z-1);
+                    int y = (yBarLength + yOffsetFromImage) - yAxisSpacing*oldLevel;
+                    g.drawLine(xSpacing, ySpacing, x, y);
+                }
+                oldLevel = level;
+            }
+            //draw player names
+            g.drawString(users.get(i).getUserName() + " (" + users.get(i).getAccountType()+")", xBarLength + xOffsetFromImage + userTextOffset, (i+2)*15);
+        }
+        
+        return graph;
+    }
+
+    
+    /*
     public void drawGraph()
     {
         if(users.isEmpty())
@@ -137,4 +276,5 @@ public class OSRSGraph
         }
         catch(IOException e){}
     }
+*/
 }
