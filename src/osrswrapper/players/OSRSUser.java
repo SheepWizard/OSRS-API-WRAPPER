@@ -15,6 +15,7 @@ public class OSRSUser
     private final HashMap<String, OSRSStat> playerStats = new HashMap<>();
     private final HashMap<String, OSRSMinigame> playerMinigames = new HashMap<>();
     private final String RSURL;
+    private boolean valid = false;
     
     private final String[] statNames = new String[]{
         "overall",
@@ -121,6 +122,7 @@ public class OSRSUser
             index++;
         }
         in.close();
+        valid = true;
  
     }
     
@@ -170,10 +172,16 @@ public class OSRSUser
     
     public void changePlayer(String userName) throws IOException
     {
+        valid = false;
         playerStats.clear();
         playerMinigames.clear();
         this.userName = userName;
         createStats();
+    }
+    
+    public boolean getValid()
+    {
+        return this.valid;
     }
     
     private int getCombatLevel(int defc, int hit, int prayer, int att, int stre, int rang, int mag)
